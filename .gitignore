@@ -1,0 +1,10 @@
+*.filters
+*.opensdf
+*.sdf
+*.sln
+*.vcxproj
+CMakeFiles
+CMakeCache.txt
+Debug
+Release
+cmake_install.cmake
