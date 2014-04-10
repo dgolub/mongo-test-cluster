@@ -10,7 +10,8 @@
 const QString TestClusterModel::_columnHeaders[TestClusterModel::COLUMN_MAX] = {
     "Port",
     "DB Path",
-    "Type"
+    "Type",
+    "State"
 };
 
 TestClusterModel::TestClusterModel(QObject* parent)
@@ -35,6 +36,17 @@ QVariant TestClusterModel::data(const QModelIndex& index, int role) const {
         return info.dbPath;
     case COLUMN_TYPE:
         return getHostTypeName(info.type);
+    case COLUMN_STATE:
+        switch (info.state) {
+        case QProcess::NotRunning:
+            return "Stopped";
+        case QProcess::Starting:
+            return "Starting";
+        case QProcess::Running:
+            return "Running";
+        default:
+            return "Unknown";
+        }
     default:
         return QVariant();
     }
@@ -76,6 +88,7 @@ void TestClusterModel::addHost(int port, const QString& dbPath, HostType type) {
     info.dbPath = dbPath;
     info.type = type;
     info.process = new QProcess(this);
+    info.state = QProcess::Starting;
     _hosts.append(info);
     endInsertRows();
 }
@@ -107,7 +120,7 @@ void TestClusterModel::stopHost(const QModelIndex& index) {
     }
     const HostInfo& info = _hosts[index.row()];
 #ifdef _WIN32
-    // On Windows, QProcess::kill uses an implementation appropriate for GUI applications but not for console
+    // On Windows, QProcess::terminate uses an implementation appropriate for GUI applications but not for console
     // applications, so we need to do this manually using Win32.
     ::AttachConsole(info.process->pid()->dwProcessId);
     ::SetConsoleCtrlHandler(NULL, TRUE);
@@ -115,6 +128,17 @@ void TestClusterModel::stopHost(const QModelIndex& index) {
     ::SetConsoleCtrlHandler(NULL, FALSE);
     ::FreeConsole();
 #else
-    info.process->kill();
+    info.process->terminate();
 #endif
+}
+
+void TestClusterModel::updateHostStates() {
+    for (int i = 0; i < _hosts.size(); i++) {
+        HostInfo& info = _hosts[i];
+        if (info.state != info.process->state()) {
+            info.state = info.process->state();
+            QModelIndex index = createIndex(i, COLUMN_STATE);
+            emit dataChanged(index, index);
+        }
+    }
 }

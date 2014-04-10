@@ -21,12 +21,14 @@ public:
     void addHost(int port, const QString& dbPath, HostType type);
     void startHost(const QModelIndex& index);
     void stopHost(const QModelIndex& index);
+    void updateHostStates();
 
 private:
     enum Column {
         COLUMN_PORT,
         COLUMN_DBPATH,
         COLUMN_TYPE,
+        COLUMN_STATE,
         COLUMN_MAX
     };
 
@@ -35,6 +37,7 @@ private:
         QString dbPath;
         HostType type;
         QProcess* process;
+        QProcess::ProcessState state;
     };
 
     static const QString _columnHeaders[COLUMN_MAX];

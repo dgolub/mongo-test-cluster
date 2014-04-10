@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QMainWindow>
 #include <QMenu>
+#include <QTimer>
 
 #include "ui_main_window.h"
 
@@ -18,6 +19,7 @@ public:
 private slots:
     void addHost();
     void doHostContextMenu(const QPoint& pos);
+    void updateHostStates();
 
 private:
     Ui::MainWindow _ui;
@@ -25,4 +27,5 @@ private:
     QMenu* _hostContextMenu;
     QAction* _startHostAction;
     QAction* _stopHostAction;
+    QTimer* _updateTimer;
 };

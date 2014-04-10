@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget* parent)
     _startHostAction = _hostContextMenu->addAction("Start");
     _stopHostAction = _hostContextMenu->addAction("Stop");
 
+    _updateTimer = new QTimer(this);
+    _updateTimer->start(100);
+
     connect(_ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(_ui.pushButtonAddHost, SIGNAL(clicked()), this, SLOT(addHost()));
     connect(
@@ -24,6 +27,7 @@ MainWindow::MainWindow(QWidget* parent)
         SIGNAL(customContextMenuRequested(const QPoint&)),
         this,
         SLOT(doHostContextMenu(const QPoint&)));
+    connect(_updateTimer, SIGNAL(timeout()), this, SLOT(updateHostStates()));
 }
 
 void MainWindow::addHost() {
@@ -41,4 +45,8 @@ void MainWindow::doHostContextMenu(const QPoint& pos) {
     } else if (action == _stopHostAction) {
         _model->stopHost(_ui.treeView->currentIndex());
     }
+}
+
+void MainWindow::updateHostStates() {
+    _model->updateHostStates();
 }
