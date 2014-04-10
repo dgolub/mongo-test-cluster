@@ -7,6 +7,8 @@
 #include <windows.h>
 #endif
 
+#include <QBrush>
+
 const QString TestClusterModel::_columnHeaders[TestClusterModel::COLUMN_MAX] = {
     "Port",
     "DB Path",
@@ -25,28 +27,45 @@ int TestClusterModel::columnCount(const QModelIndex& parent) const {
 }
 
 QVariant TestClusterModel::data(const QModelIndex& index, int role) const {
-    if (role != Qt::DisplayRole || index.row() < 0 || index.row() >= _hosts.size()) {
+    if (index.row() < 0 || index.row() >= _hosts.size()) {
         return QVariant();
     }
     const HostInfo& info = _hosts[index.row()];
-    switch (index.column()) {
-    case COLUMN_PORT:
-        return info.port;
-    case COLUMN_DBPATH:
-        return info.dbPath;
-    case COLUMN_TYPE:
-        return getHostTypeName(info.type);
-    case COLUMN_STATE:
-        switch (info.state) {
-        case QProcess::NotRunning:
-            return "Stopped";
-        case QProcess::Starting:
-            return "Starting";
-        case QProcess::Running:
-            return "Running";
+    switch (role) {
+    case Qt::DisplayRole:
+        switch (index.column()) {
+        case COLUMN_PORT:
+            return info.port;
+        case COLUMN_DBPATH:
+            return info.dbPath;
+        case COLUMN_TYPE:
+            return getHostTypeName(info.type);
+        case COLUMN_STATE:
+            switch (info.state) {
+            case QProcess::NotRunning:
+                return "Stopped";
+            case QProcess::Starting:
+                return "Starting";
+            case QProcess::Running:
+                return "Running";
+            default:
+                return "Unknown";
+            }
         default:
-            return "Unknown";
+            return QVariant();
         }
+    case Qt::ForegroundRole:
+        if (index.column() == COLUMN_STATE) {
+            switch (info.state) {
+            case QProcess::NotRunning:
+                return QBrush(Qt::red);
+            case QProcess::Starting:
+                return QBrush(Qt::darkYellow);
+            case QProcess::Running:
+                return QBrush(Qt::darkGreen);
+            }
+        }
+        return QVariant();
     default:
         return QVariant();
     }
