@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>121</height>
+    <height>147</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,42 +22,52 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="1">
+     <item row="2" column="2">
       <widget class="QLineEdit" name="lineEditDBPath"/>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="labelType">
-       <property name="text">
-        <string>Type:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
       <widget class="QLabel" name="labelDBPath">
        <property name="text">
         <string>DB Path:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
+     <item row="1" column="0">
       <widget class="QLabel" name="labelPort">
        <property name="text">
         <string>Port:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1" colspan="2">
+     <item row="1" column="2" colspan="2">
       <widget class="QLineEdit" name="lineEditPort"/>
      </item>
-     <item row="2" column="1" colspan="2">
-      <widget class="QComboBox" name="comboBoxType"/>
-     </item>
-     <item row="1" column="2">
+     <item row="2" column="3">
       <widget class="QToolButton" name="toolButtonDBPath">
        <property name="text">
         <string>...</string>
        </property>
       </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelType">
+       <property name="text">
+        <string>Type:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" colspan="2">
+      <widget class="QComboBox" name="comboBoxType"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="labelReplicaSet">
+       <property name="text">
+        <string>Replica Set:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" colspan="2">
+      <widget class="QLineEdit" name="lineEditReplicaSet"/>
      </item>
     </layout>
    </item>
@@ -74,10 +84,11 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>comboBoxType</tabstop>
   <tabstop>lineEditPort</tabstop>
   <tabstop>lineEditDBPath</tabstop>
   <tabstop>toolButtonDBPath</tabstop>
-  <tabstop>comboBoxType</tabstop>
+  <tabstop>lineEditReplicaSet</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>

@@ -35,7 +35,7 @@ void MainWindow::addHost() {
     if (dlg.exec() != QDialog::Accepted) {
         return;
     }
-    _model->addHost(dlg.port(), dlg.dbPath(), dlg.type());
+    _model->addHost(dlg.type(), dlg.port(), dlg.dbPath(), dlg.replicaSet());
 }
 
 void MainWindow::doHostContextMenu(const QPoint& pos) {

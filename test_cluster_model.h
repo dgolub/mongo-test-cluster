@@ -18,24 +18,26 @@ public:
     virtual QModelIndex parent(const QModelIndex& index) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
-    void addHost(int port, const QString& dbPath, HostType type);
+    void addHost(HostType type, int port, const QString& dbPath, const QString& replicaSet);
     void startHost(const QModelIndex& index);
     void stopHost(const QModelIndex& index);
     void updateHostStates();
 
 private:
     enum Column {
+        COLUMN_TYPE,
         COLUMN_PORT,
         COLUMN_DBPATH,
-        COLUMN_TYPE,
+        COLUMN_REPLICASET,
         COLUMN_STATE,
         COLUMN_MAX
     };
 
     struct HostInfo {
+        HostType type;
         int port;
         QString dbPath;
-        HostType type;
+        QString replicaSet;
         QProcess* process;
         QProcess::ProcessState state;
     };

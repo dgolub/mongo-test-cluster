@@ -27,6 +27,10 @@ AddHostDialog::AddHostDialog(QWidget* parent)
     }
 }
 
+HostType AddHostDialog::type() const {
+    return (HostType)_ui.comboBoxType->currentIndex();
+}
+
 int AddHostDialog::port() const {
     return _ui.lineEditPort->text().toInt();
 }
@@ -35,8 +39,8 @@ QString AddHostDialog::dbPath() const {
     return _ui.lineEditDBPath->text();
 }
 
-HostType AddHostDialog::type() const {
-    return (HostType)_ui.comboBoxType->currentIndex();
+QString AddHostDialog::replicaSet() const {
+    return _ui.lineEditReplicaSet->text();
 }
 
 void AddHostDialog::accept() {

@@ -12,9 +12,10 @@ class AddHostDialog : public QDialog {
 public:
     AddHostDialog(QWidget* parent = nullptr);
 
+    HostType type() const;
     int port() const;
     QString dbPath() const;
-    HostType type() const;
+    QString replicaSet() const;
 
     virtual void accept();
 

@@ -10,9 +10,10 @@
 #include <QBrush>
 
 const QString TestClusterModel::_columnHeaders[TestClusterModel::COLUMN_MAX] = {
+    "Type",
     "Port",
     "DB Path",
-    "Type",
+    "Replica Set",
     "State"
 };
 
@@ -34,12 +35,14 @@ QVariant TestClusterModel::data(const QModelIndex& index, int role) const {
     switch (role) {
     case Qt::DisplayRole:
         switch (index.column()) {
+        case COLUMN_TYPE:
+            return getHostTypeName(info.type);
         case COLUMN_PORT:
             return info.port;
         case COLUMN_DBPATH:
             return info.dbPath;
-        case COLUMN_TYPE:
-            return getHostTypeName(info.type);
+        case COLUMN_REPLICASET:
+            return info.replicaSet;
         case COLUMN_STATE:
             switch (info.state) {
             case QProcess::NotRunning:
@@ -100,12 +103,13 @@ int TestClusterModel::rowCount(const QModelIndex& parent) const {
     return _hosts.size();
 }
 
-void TestClusterModel::addHost(int port, const QString& dbPath, HostType type) {
+void TestClusterModel::addHost(HostType type, int port, const QString& dbPath, const QString& replicaSet) {
     beginInsertRows(QModelIndex(), _hosts.size(), _hosts.size());
     HostInfo info;
+    info.type = type;
     info.port = port;
     info.dbPath = dbPath;
-    info.type = type;
+    info.replicaSet = replicaSet;
     info.process = new QProcess(this);
     info.state = QProcess::Starting;
     _hosts.append(info);
@@ -127,6 +131,10 @@ void TestClusterModel::startHost(const QModelIndex& index) {
     if (info.type != HOST_TYPE_MONGOS) {
         arguments.append("--dbpath");
         arguments.append(info.dbPath);
+    }
+    if (info.type != HOST_TYPE_MONGOS && info.type != HOST_TYPE_CONFIG && !info.replicaSet.isEmpty()) {
+        arguments.append("--replSet");
+        arguments.append(info.replicaSet);
     }
     if (info.type == HOST_TYPE_SHARD) {
         arguments.append("--shardsvr");
