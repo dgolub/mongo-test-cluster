@@ -18,6 +18,8 @@ add_executable(mongotestcluster WIN32
     host_types.h
     main_window.cpp
     main_window.h
+    test_cluster_model.cpp
+    test_cluster_model.h
     ${UI_HEADERS})
 
 target_link_libraries(mongotestcluster Qt5::Widgets)

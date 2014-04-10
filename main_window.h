@@ -6,6 +6,8 @@
 
 #include "ui_main_window.h"
 
+class TestClusterModel;
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
@@ -16,4 +18,5 @@ private slots:
 
 private:
     Ui::MainWindow _ui;
+    TestClusterModel* _model;
 };
