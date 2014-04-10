@@ -14,6 +14,7 @@ AddHostDialog::AddHostDialog(QWidget* parent)
     _ui.setupUi(this);
 
     connect(_ui.toolButtonDBPath, SIGNAL(clicked()), this, SLOT(browseForDBPath()));
+    connect(_ui.comboBoxType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
 
     // Give the dialog a fixed border.
     setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
@@ -82,4 +83,16 @@ void AddHostDialog::browseForDBPath() {
         return;
     }
     _ui.lineEditDBPath->setText(newDBPath);
+}
+
+void AddHostDialog::typeChanged(int index) {
+    if (index == HOST_TYPE_MONGOS) {
+        _ui.lineEditDBPath->clear();
+    }
+    _ui.lineEditDBPath->setEnabled(index != HOST_TYPE_MONGOS);
+    _ui.toolButtonDBPath->setEnabled(index != HOST_TYPE_MONGOS);
+    if (index == HOST_TYPE_MONGOS || index == HOST_TYPE_CONFIG) {
+        _ui.lineEditReplicaSet->clear();
+    }
+    _ui.lineEditReplicaSet->setEnabled(index != HOST_TYPE_MONGOS && index != HOST_TYPE_CONFIG);
 }

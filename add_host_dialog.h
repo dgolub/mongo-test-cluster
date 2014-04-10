@@ -21,6 +21,7 @@ public:
 
 private slots:
     void browseForDBPath();
+    void typeChanged(int index);
 
 private:
     Ui::AddHostDialog _ui;
