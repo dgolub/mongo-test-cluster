@@ -2,7 +2,10 @@
 
 #include "main_window.h"
 #include "add_host_dialog.h"
+#include "console_output_dialog.h"
 #include "test_cluster_model.h"
+
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -27,7 +30,12 @@ MainWindow::MainWindow(QWidget* parent)
         SIGNAL(customContextMenuRequested(const QPoint&)),
         this,
         SLOT(doHostContextMenu(const QPoint&)));
-    connect(_updateTimer, SIGNAL(timeout()), this, SLOT(updateHostStates()));
+    connect(
+        _ui.treeView,
+        SIGNAL(doubleClicked(const QModelIndex&)),
+        this,
+        SLOT(hostDoubleClicked(const QModelIndex&)));
+    connect(_updateTimer, SIGNAL(timeout()), this, SLOT(updateHosts()));
 }
 
 void MainWindow::addHost() {
@@ -53,6 +61,11 @@ void MainWindow::doHostContextMenu(const QPoint& pos) {
     }
 }
 
-void MainWindow::updateHostStates() {
-    _model->updateHostStates();
+void MainWindow::hostDoubleClicked(const QModelIndex& index) {
+    ConsoleOutputDialog dlg(_model, index, this);
+    dlg.exec();
+}
+
+void MainWindow::updateHosts() {
+    _model->updateHosts();
 }

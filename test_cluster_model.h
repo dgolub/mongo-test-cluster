@@ -21,7 +21,8 @@ public:
     void addHost(HostType type, int port, const QString& dbPath, const QString& replicaSet);
     void startHost(const QModelIndex& index);
     void stopHost(const QModelIndex& index);
-    void updateHostStates();
+    void updateHosts();
+    QString hostConsoleOutput(const QModelIndex& index) const;
 
 private:
     enum Column {
@@ -40,6 +41,7 @@ private:
         QString replicaSet;
         QProcess* process;
         QProcess::ProcessState state;
+        QString consoleOutput;
     };
 
     static const QString _columnHeaders[COLUMN_MAX];

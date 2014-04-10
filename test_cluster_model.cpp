@@ -120,7 +120,7 @@ void TestClusterModel::startHost(const QModelIndex& index) {
     if (index.row() < 0 || index.row() >= _hosts.size()) {
         return;
     }
-    const HostInfo& info = _hosts[index.row()];
+    HostInfo& info = _hosts[index.row()];
     if (info.process->state() != QProcess::NotRunning) {
         return;
     }
@@ -141,6 +141,7 @@ void TestClusterModel::startHost(const QModelIndex& index) {
     } else if (info.type == HOST_TYPE_CONFIG) {
         arguments.append("--configsvr");
     }
+    info.consoleOutput.clear();
     info.process->start(program, arguments);
 }
 
@@ -165,7 +166,7 @@ void TestClusterModel::stopHost(const QModelIndex& index) {
 #endif
 }
 
-void TestClusterModel::updateHostStates() {
+void TestClusterModel::updateHosts() {
     for (int i = 0; i < _hosts.size(); i++) {
         HostInfo& info = _hosts[i];
         if (info.state != info.process->state()) {
@@ -173,5 +174,15 @@ void TestClusterModel::updateHostStates() {
             QModelIndex index = createIndex(i, COLUMN_STATE);
             emit dataChanged(index, index);
         }
+        if (info.state != QProcess::NotRunning) {
+            info.consoleOutput += info.process->readAll();
+        }
     }
+}
+
+QString TestClusterModel::hostConsoleOutput(const QModelIndex& index) const {
+    if (index.row() < 0 || index.row() >= _hosts.size()) {
+        return QString();
+    }
+    return _hosts[index.row()].consoleOutput;
 }

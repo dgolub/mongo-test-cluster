@@ -8,12 +8,15 @@ find_package(Qt5Widgets REQUIRED)
 
 qt5_wrap_ui(UI_HEADERS
     add_host_dialog.ui
+    console_output_dialog.ui
     main_window.ui)
 
 add_executable(mongotestcluster WIN32
     mongotestcluster.cpp
     add_host_dialog.cpp
     add_host_dialog.h
+    console_output_dialog.cpp
+    console_output_dialog.h
     host_types.cpp
     host_types.h
     main_window.cpp

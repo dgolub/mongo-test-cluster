@@ -19,7 +19,8 @@ public:
 private slots:
     void addHost();
     void doHostContextMenu(const QPoint& pos);
-    void updateHostStates();
+    void hostDoubleClicked(const QModelIndex& index);
+    void updateHosts();
 
 private:
     Ui::MainWindow _ui;
