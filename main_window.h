@@ -7,8 +7,12 @@
 #include "ui_main_window.h"
 
 class MainWindow : public QMainWindow {
+    Q_OBJECT
 public:
     MainWindow(QWidget* parent = nullptr);
+
+private slots:
+    void addHost();
 
 private:
     Ui::MainWindow _ui;

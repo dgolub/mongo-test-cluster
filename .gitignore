@@ -4,10 +4,12 @@
 *.sln
 *.suo
 *.vcxproj
+*_automoc.cpp
 CMakeFiles
 CMakeCache.txt
 Debug
 RelWithDebInfo
 Release
 cmake_install.cmake
+moc_*.cpp
 ui_*.h
