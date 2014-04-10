@@ -73,6 +73,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEditPort</tabstop>
+  <tabstop>lineEditDBPath</tabstop>
+  <tabstop>toolButtonDBPath</tabstop>
+  <tabstop>comboBoxType</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
