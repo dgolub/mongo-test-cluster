@@ -1,13 +1,20 @@
 /* (C) Copyright 2014, MongoDB, Inc. */
 
+#include <QApplication>
+
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <stdlib.h>
 #endif
 
+#include "main_window.h"
+
 int main(int argc, char** argv) {
-    return 0;
+    QApplication app(argc, argv);
+    MainWindow* mainWindow = new MainWindow();
+    mainWindow->show();
+    return QApplication::exec();
 }
 
 #ifdef _WIN32

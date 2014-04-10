@@ -2,9 +2,12 @@
 *.opensdf
 *.sdf
 *.sln
+*.suo
 *.vcxproj
 CMakeFiles
 CMakeCache.txt
 Debug
+RelWithDebInfo
 Release
 cmake_install.cmake
+ui_*.h
