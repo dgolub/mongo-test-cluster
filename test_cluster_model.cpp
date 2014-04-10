@@ -2,6 +2,11 @@
 
 #include "test_cluster_model.h"
 
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 const QString TestClusterModel::_columnHeaders[TestClusterModel::COLUMN_MAX] = {
     "Port",
     "DB Path",
@@ -70,6 +75,46 @@ void TestClusterModel::addHost(int port, const QString& dbPath, HostType type) {
     info.port = port;
     info.dbPath = dbPath;
     info.type = type;
+    info.process = new QProcess(this);
     _hosts.append(info);
     endInsertRows();
+}
+
+void TestClusterModel::startHost(const QModelIndex& index) {
+    if (index.row() < 0 || index.row() >= _hosts.size()) {
+        return;
+    }
+    const HostInfo& info = _hosts[index.row()];
+    QString program = (info.type == HOST_TYPE_MONGOS) ? "mongos" : "mongod";
+    QStringList arguments;
+    arguments.append("--port");
+    arguments.append(QString::number(info.port));
+    if (info.type != HOST_TYPE_MONGOS) {
+        arguments.append("--dbpath");
+        arguments.append(info.dbPath);
+    }
+    if (info.type == HOST_TYPE_SHARD) {
+        arguments.append("--shardsvr");
+    } else if (info.type == HOST_TYPE_CONFIG) {
+        arguments.append("--configsvr");
+    }
+    info.process->start(program, arguments);
+}
+
+void TestClusterModel::stopHost(const QModelIndex& index) {
+    if (index.row() < 0 || index.row() >= _hosts.size()) {
+        return;
+    }
+    const HostInfo& info = _hosts[index.row()];
+#ifdef _WIN32
+    // On Windows, QProcess::kill uses an implementation appropriate for GUI applications but not for console
+    // applications, so we need to do this manually using Win32.
+    ::AttachConsole(info.process->pid()->dwProcessId);
+    ::SetConsoleCtrlHandler(NULL, TRUE);
+    ::GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0);
+    ::SetConsoleCtrlHandler(NULL, FALSE);
+    ::FreeConsole();
+#else
+    info.process->kill();
+#endif
 }

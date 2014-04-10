@@ -3,6 +3,7 @@
 #pragma once
 
 #include <QAbstractItemModel>
+#include <QProcess>
 
 #include "host_types.h"
 
@@ -18,6 +19,8 @@ public:
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
     void addHost(int port, const QString& dbPath, HostType type);
+    void startHost(const QModelIndex& index);
+    void stopHost(const QModelIndex& index);
 
 private:
     enum Column {
@@ -31,6 +34,7 @@ private:
         int port;
         QString dbPath;
         HostType type;
+        QProcess* process;
     };
 
     static const QString _columnHeaders[COLUMN_MAX];
