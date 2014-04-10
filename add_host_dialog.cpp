@@ -27,6 +27,18 @@ AddHostDialog::AddHostDialog(QWidget* parent)
     }
 }
 
+int AddHostDialog::port() const {
+    return _ui.lineEditPort->text().toInt();
+}
+
+QString AddHostDialog::dbPath() const {
+    return _ui.lineEditDBPath->text();
+}
+
+HostType AddHostDialog::type() const {
+    return (HostType)_ui.comboBoxType->currentIndex();
+}
+
 void AddHostDialog::accept() {
     // Verify that the required fields are specified.
     if (_ui.lineEditPort->text().isEmpty()) {

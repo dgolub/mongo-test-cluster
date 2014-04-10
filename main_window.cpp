@@ -18,5 +18,8 @@ MainWindow::MainWindow(QWidget* parent)
 
 void MainWindow::addHost() {
     AddHostDialog dlg(this);
-    dlg.exec();
+    if (dlg.exec() != QDialog::Accepted) {
+        return;
+    }
+    _model->addHost(dlg.port(), dlg.dbPath(), dlg.type());
 }

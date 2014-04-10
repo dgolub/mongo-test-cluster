@@ -4,12 +4,17 @@
 
 #include <QDialog>
 
+#include "host_types.h"
 #include "ui_add_host_dialog.h"
 
 class AddHostDialog : public QDialog {
     Q_OBJECT
 public:
     AddHostDialog(QWidget* parent = nullptr);
+
+    int port() const;
+    QString dbPath() const;
+    HostType type() const;
 
     virtual void accept();
 
