@@ -9,9 +9,15 @@
 class TestClusterModel;
 
 class ConsoleOutputDialog : public QDialog {
+    Q_OBJECT
 public:
     ConsoleOutputDialog(const TestClusterModel* model, const QModelIndex& index, QWidget* parent = nullptr);
 
+private slots:
+    void consoleOutputChanged(int row);
+
 private:
     Ui::ConsoleOutputDialog _ui;
+    const TestClusterModel* _model;
+    QModelIndex _index;
 };

@@ -8,6 +8,7 @@
 #include "host_types.h"
 
 class TestClusterModel : public QAbstractItemModel {
+    Q_OBJECT
 public:
     TestClusterModel(QObject* parent = nullptr);
 
@@ -23,6 +24,9 @@ public:
     void stopHost(const QModelIndex& index);
     void updateHosts();
     QString hostConsoleOutput(const QModelIndex& index) const;
+
+signals:
+    void consoleOutputChanged(int row);
 
 private:
     enum Column {

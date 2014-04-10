@@ -175,7 +175,11 @@ void TestClusterModel::updateHosts() {
             emit dataChanged(index, index);
         }
         if (info.state != QProcess::NotRunning) {
-            info.consoleOutput += info.process->readAll();
+            QByteArray newConsoleOutput = info.process->readAll();
+            if (!newConsoleOutput.isEmpty()) {
+                info.consoleOutput += newConsoleOutput;
+                emit consoleOutputChanged(i);
+            }
         }
     }
 }
