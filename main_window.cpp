@@ -5,4 +5,5 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent) {
     _ui.setupUi(this);
+    connect(_ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
 }
