@@ -1,3 +1,5 @@
+/* (C) Copyright 2014, MongoDB, Inc. */
+
 #include "test_cluster_model.h"
 
 const QString TestClusterModel::_columnHeaders[TestClusterModel::COLUMN_MAX] = {
@@ -7,9 +9,12 @@ const QString TestClusterModel::_columnHeaders[TestClusterModel::COLUMN_MAX] = {
 };
 
 TestClusterModel::TestClusterModel(QObject* parent)
-    : QAbstractTableModel(parent) {}
+    : QAbstractItemModel(parent) {}
 
 int TestClusterModel::columnCount(const QModelIndex& parent) const {
+    if (parent != QModelIndex()) {
+        return 0;
+    }
     return COLUMN_MAX;
 }
 
@@ -44,7 +49,18 @@ QVariant TestClusterModel::headerData(int section, Qt::Orientation orientation, 
     }
 }
 
+QModelIndex TestClusterModel::index(int row, int column, const QModelIndex& parent) const {
+    return createIndex(row, column);
+}
+
+QModelIndex TestClusterModel::parent(const QModelIndex& index) const {
+    return QModelIndex();
+}
+
 int TestClusterModel::rowCount(const QModelIndex& parent) const {
+    if (parent != QModelIndex()) {
+        return 0;
+    }
     return _hosts.size();
 }
 

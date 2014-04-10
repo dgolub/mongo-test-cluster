@@ -40,7 +40,17 @@
      </layout>
     </item>
     <item>
-     <widget class="QTableView" name="tableView"/>
+     <widget class="QTreeView" name="treeView">
+      <property name="indentation">
+       <number>0</number>
+      </property>
+      <property name="itemsExpandable">
+       <bool>false</bool>
+      </property>
+      <property name="expandsOnDoubleClick">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

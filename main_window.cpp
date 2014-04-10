@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget* parent)
     _model = new TestClusterModel(this);
 
     _ui.setupUi(this);
-    _ui.tableView->setModel(_model);
+    _ui.treeView->setModel(_model);
 
     connect(_ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(_ui.pushButtonAddHost, SIGNAL(clicked()), this, SLOT(addHost()));
