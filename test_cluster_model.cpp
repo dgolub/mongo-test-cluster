@@ -117,6 +117,9 @@ void TestClusterModel::startHost(const QModelIndex& index) {
         return;
     }
     const HostInfo& info = _hosts[index.row()];
+    if (info.process->state() != QProcess::NotRunning) {
+        return;
+    }
     QString program = (info.type == HOST_TYPE_MONGOS) ? "mongos" : "mongod";
     QStringList arguments;
     arguments.append("--port");
@@ -138,6 +141,9 @@ void TestClusterModel::stopHost(const QModelIndex& index) {
         return;
     }
     const HostInfo& info = _hosts[index.row()];
+    if (info.process->state() == QProcess::NotRunning) {
+        return;
+    }
 #ifdef _WIN32
     // On Windows, QProcess::terminate uses an implementation appropriate for GUI applications but not for console
     // applications, so we need to do this manually using Win32.

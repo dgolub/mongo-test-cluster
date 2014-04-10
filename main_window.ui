@@ -41,6 +41,9 @@
     </item>
     <item>
      <widget class="QTreeView" name="treeView">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
       <property name="indentation">
        <number>0</number>
       </property>

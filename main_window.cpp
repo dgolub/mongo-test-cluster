@@ -39,11 +39,17 @@ void MainWindow::addHost() {
 }
 
 void MainWindow::doHostContextMenu(const QPoint& pos) {
+    QModelIndexList indexes = _ui.treeView->selectionModel()->selectedRows();
+    if (indexes.isEmpty()) {
+        return;
+    }
     QAction* action = _hostContextMenu->exec(_ui.treeView->mapToGlobal(pos));
-    if (action == _startHostAction) {
-        _model->startHost(_ui.treeView->currentIndex());
-    } else if (action == _stopHostAction) {
-        _model->stopHost(_ui.treeView->currentIndex());
+    for (QModelIndex index : indexes) {
+        if (action == _startHostAction) {
+            _model->startHost(index);
+        } else if (action == _stopHostAction) {
+            _model->stopHost(index);
+        }
     }
 }
 
