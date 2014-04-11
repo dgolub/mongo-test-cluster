@@ -228,6 +228,20 @@ void TestClusterModel::stopAllHosts() {
     }
 }
 
+void TestClusterModel::clearCluster() {
+    for (const HostInfo& info : _hosts) {
+        if (info.process != nullptr) {
+            delete info.process;
+        }
+    }
+    if (!_hosts.isEmpty()) {
+        beginRemoveRows(QModelIndex(), 0, _hosts.size() - 1);
+        _hosts.clear();
+        endRemoveRows();
+    }
+    _dirty = false;
+}
+
 void TestClusterModel::saveToFile(const QString& fileName) {
     QJsonArray array;
     for (const HostInfo& info : _hosts) {

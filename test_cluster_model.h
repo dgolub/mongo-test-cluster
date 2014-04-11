@@ -32,6 +32,7 @@ public:
     void startAllHosts();
     void stopAllHosts();
 
+    void clearCluster();
     void saveToFile(const QString& fileName);
     bool loadFromFile(const QString& fileName);
 

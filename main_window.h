@@ -24,6 +24,7 @@ private:
     bool promptToSave();
 
 private slots:
+    void newCluster();
     void openCluster();
     void saveClusterAs();
     void startAllHosts();

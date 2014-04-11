@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget* parent)
     _updateTimer = new QTimer(this);
     _updateTimer->start(100);
 
+    connect(_ui.actionNewCluster, SIGNAL(triggered()), this, SLOT(newCluster()));
     connect(_ui.actionOpenCluster, SIGNAL(triggered()), this, SLOT(openCluster()));
     connect(_ui.actionSaveClusterAs, SIGNAL(triggered()), this, SLOT(saveClusterAs()));
     connect(_ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
@@ -96,6 +97,13 @@ bool MainWindow::promptToSave() {
     }
     saveClusterAs();
     return !_model->isDirty();
+}
+
+void MainWindow::newCluster() {
+    if (!promptToSave()) {
+        return;
+    }
+    _model->clearCluster();
 }
 
 void MainWindow::openCluster() {
