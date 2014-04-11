@@ -186,6 +186,16 @@ void TestClusterModel::stopHost(const QModelIndex& index) {
 #endif
 }
 
+void TestClusterModel::removeHost(const QModelIndex& index) {
+    if (index.row() < 0 || index.row() >= _hosts.size() || hostRunning(index)) {
+        return;
+    }
+    beginRemoveRows(QModelIndex(), index.row(), index.row());
+    _hosts.removeAt(index.row());
+    endRemoveRows();
+    _dirty = true;
+}
+
 void TestClusterModel::updateHosts() {
     _anyStarted = false;
     _anyStopped = false;

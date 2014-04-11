@@ -22,6 +22,7 @@ public:
     void addHost(HostType type, int port, const QString& dbPath, const QString& replicaSet, const QString& configDB);
     void startHost(const QModelIndex& index);
     void stopHost(const QModelIndex& index);
+    void removeHost(const QModelIndex& index);
     void updateHosts();
 
     int hostPort(const QModelIndex& index) const;

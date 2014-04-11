@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget* parent)
     _stopHostAction = _hostContextMenu->addAction("Stop");
     _hostContextMenu->addSeparator();
     _openMongoShellAction = _hostContextMenu->addAction("Open Mongo Shell");
+    _hostContextMenu->addSeparator();
+    _removeAction = _hostContextMenu->addAction("Remove");
 
     _updateTimer = new QTimer(this);
     _updateTimer->start(100);
@@ -207,6 +209,7 @@ void MainWindow::doHostContextMenu(const QPoint& pos) {
     _startHostAction->setEnabled(anyStopped);
     _stopHostAction->setEnabled(anyStarted);
     _openMongoShellAction->setEnabled(anyStarted && indexes.size() == 1);
+    _removeAction->setEnabled(!anyStarted);
     QAction* action = _hostContextMenu->exec(_ui.treeView->mapToGlobal(pos));
     for (QModelIndex index : indexes) {
         if (action == _startHostAction) {
@@ -218,6 +221,8 @@ void MainWindow::doHostContextMenu(const QPoint& pos) {
             arguments.append("--port");
             arguments.append(QString::number(_model->hostPort(index)));
             QProcess().startDetached("mongo", arguments);
+        } else if (action == _removeAction) {
+            _model->removeHost(index);
         }
     }
 }
