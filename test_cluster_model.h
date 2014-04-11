@@ -27,11 +27,12 @@ public:
     QString hostConsoleOutput(const QModelIndex& index) const;
     bool anyStarted() const;
     bool anyStopped() const;
+    bool isDirty() const;
 
     void startAllHosts();
     void stopAllHosts();
 
-    void saveToFile(const QString& fileName) const;
+    void saveToFile(const QString& fileName);
     bool loadFromFile(const QString& fileName);
 
 signals:
@@ -62,4 +63,5 @@ private:
     QList<HostInfo> _hosts;
     bool _anyStarted;
     bool _anyStopped;
+    bool _dirty;
 };

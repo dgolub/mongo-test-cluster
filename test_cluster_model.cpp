@@ -23,7 +23,7 @@ const QString TestClusterModel::_columnHeaders[TestClusterModel::COLUMN_MAX] = {
 };
 
 TestClusterModel::TestClusterModel(QObject* parent)
-    : QAbstractItemModel(parent) {}
+    : QAbstractItemModel(parent), _dirty(false) {}
 
 int TestClusterModel::columnCount(const QModelIndex& parent) const {
     if (parent != QModelIndex()) {
@@ -119,6 +119,7 @@ void TestClusterModel::addHost(HostType type, int port, const QString& dbPath, c
     info.state = QProcess::Starting;
     _hosts.append(info);
     endInsertRows();
+    _dirty = true;
 }
 
 void TestClusterModel::startHost(const QModelIndex& index) {
@@ -211,6 +212,10 @@ bool TestClusterModel::anyStopped() const {
     return _anyStopped;
 }
 
+bool TestClusterModel::isDirty() const {
+    return _dirty;
+}
+
 void TestClusterModel::startAllHosts() {
     for (int i = 0; i < _hosts.size(); i++) {
         startHost(createIndex(i, 0));
@@ -223,7 +228,7 @@ void TestClusterModel::stopAllHosts() {
     }
 }
 
-void TestClusterModel::saveToFile(const QString& fileName) const {
+void TestClusterModel::saveToFile(const QString& fileName) {
     QJsonArray array;
     for (const HostInfo& info : _hosts) {
         QJsonObject jsonInfo;
@@ -242,6 +247,7 @@ void TestClusterModel::saveToFile(const QString& fileName) const {
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     file.write(doc.toJson());
     file.close();
+    _dirty = false;
 }
 
 bool TestClusterModel::loadFromFile(const QString& fileName) {
@@ -295,5 +301,6 @@ bool TestClusterModel::loadFromFile(const QString& fileName) {
     beginInsertRows(QModelIndex(), 0, newHosts.size() - 1);
     _hosts = newHosts;
     endInsertRows();
+    _dirty = false;
     return true;
 }

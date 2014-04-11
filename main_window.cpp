@@ -46,6 +46,10 @@ MainWindow::MainWindow(QWidget* parent)
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
+    if (!promptToSave()) {
+        event->ignore();
+        return;
+    }
     if (_model->anyStarted()) {
         int result = QMessageBox::question(
             this,
@@ -74,7 +78,30 @@ void MainWindow::waitForAllStopped() {
     }
 }
 
+bool MainWindow::promptToSave() {
+    if (!_model->isDirty()) {
+        return true;
+    }
+    int result = QMessageBox::question(
+        this,
+        QString(),
+        "Do you want to save your changes?",
+        QMessageBox::Yes,
+        QMessageBox::No,
+        QMessageBox::Cancel);
+    if (result == QMessageBox::Cancel) {
+        return false;
+    } else if (result == QMessageBox::No) {
+        return true;
+    }
+    saveClusterAs();
+    return !_model->isDirty();
+}
+
 void MainWindow::openCluster() {
+    if (!promptToSave()) {
+        return;
+    }
     QString fileName = QFileDialog::getOpenFileName(
         this,
         QString(),
