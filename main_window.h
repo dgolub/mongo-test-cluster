@@ -19,6 +19,8 @@ public:
 private slots:
     void openCluster();
     void saveClusterAs();
+    void startAllHosts();
+    void stopAllHosts();
     void addHost();
     void doHostContextMenu(const QPoint& pos);
     void hostDoubleClicked(const QModelIndex& index);

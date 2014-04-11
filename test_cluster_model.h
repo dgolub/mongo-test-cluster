@@ -25,6 +25,9 @@ public:
     void updateHosts();
     QString hostConsoleOutput(const QModelIndex& index) const;
 
+    void startAllHosts();
+    void stopAllHosts();
+
     void saveToFile(const QString& fileName) const;
     bool loadFromFile(const QString& fileName);
 

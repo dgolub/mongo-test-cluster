@@ -147,6 +147,10 @@ void TestClusterModel::startHost(const QModelIndex& index) {
         arguments.append("--configsvr");
     }
     info.consoleOutput.clear();
+#ifdef _WIN32
+    // On Windows, ensure that signals are enabled so that the process being spawned can be stopped using CTRL+C.
+    ::SetConsoleCtrlHandler(NULL, FALSE);
+#endif
     info.process->start(program, arguments);
 }
 
@@ -161,10 +165,9 @@ void TestClusterModel::stopHost(const QModelIndex& index) {
 #ifdef _WIN32
     // On Windows, QProcess::terminate uses an implementation appropriate for GUI applications but not for console
     // applications, so we need to do this manually using Win32.
-    ::AttachConsole(info.process->pid()->dwProcessId);
     ::SetConsoleCtrlHandler(NULL, TRUE);
+    ::AttachConsole(info.process->pid()->dwProcessId);
     ::GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0);
-    ::SetConsoleCtrlHandler(NULL, FALSE);
     ::FreeConsole();
 #else
     info.process->terminate();
@@ -194,6 +197,18 @@ QString TestClusterModel::hostConsoleOutput(const QModelIndex& index) const {
         return QString();
     }
     return _hosts[index.row()].consoleOutput;
+}
+
+void TestClusterModel::startAllHosts() {
+    for (int i = 0; i < _hosts.size(); i++) {
+        startHost(createIndex(i, 0));
+    }
+}
+
+void TestClusterModel::stopAllHosts() {
+    for (int i = 0; i < _hosts.size(); i++) {
+        stopHost(createIndex(i, 0));
+    }
 }
 
 void TestClusterModel::saveToFile(const QString& fileName) const {

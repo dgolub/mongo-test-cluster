@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget* parent)
     connect(_ui.actionOpenCluster, SIGNAL(triggered()), this, SLOT(openCluster()));
     connect(_ui.actionSaveClusterAs, SIGNAL(triggered()), this, SLOT(saveClusterAs()));
     connect(_ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
+    connect(_ui.pushButtonStartAll, SIGNAL(clicked()), this, SLOT(startAllHosts()));
+    connect(_ui.pushButtonStopAll, SIGNAL(clicked()), this, SLOT(stopAllHosts()));
     connect(_ui.pushButtonAddHost, SIGNAL(clicked()), this, SLOT(addHost()));
     connect(
         _ui.treeView,
@@ -65,6 +67,14 @@ void MainWindow::saveClusterAs() {
         return;
     }
     _model->saveToFile(fileName);
+}
+
+void MainWindow::startAllHosts() {
+    _model->startAllHosts();
+}
+
+void MainWindow::stopAllHosts() {
+    _model->stopAllHosts();
 }
 
 void MainWindow::addHost() {
