@@ -3,8 +3,10 @@
 #include "add_host_dialog.h"
 #include "host_types.h"
 
+#include <QCompleter>
 #include <QDir>
 #include <QFileDialog>
+#include <QFileSystemModel>
 #include <QIntValidator>
 #include <QMessageBox>
 
@@ -21,6 +23,13 @@ AddHostDialog::AddHostDialog(QWidget* parent)
 
     // Force the port to be an integer in the correct range.
     _ui.lineEditPort->setValidator(new QIntValidator(1, 0xFFFF, this));
+
+    // Enable path auto-completion.
+    QCompleter* completer = new QCompleter(this);
+    QFileSystemModel* model = new QFileSystemModel(completer);
+    model->setRootPath(QDir::currentPath());
+    completer->setModel(model);
+    _ui.lineEditDBPath->setCompleter(completer);
 
     // Add all host types to the combo box.
     for (int i = 0; i < HOST_TYPE_MAX; i++) {
