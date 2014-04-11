@@ -17,6 +17,8 @@ public:
     MainWindow(QWidget* parent = nullptr);
 
 private slots:
+    void openCluster();
+    void saveClusterAs();
     void addHost();
     void doHostContextMenu(const QPoint& pos);
     void hostDoubleClicked(const QModelIndex& index);

@@ -25,6 +25,9 @@ public:
     void updateHosts();
     QString hostConsoleOutput(const QModelIndex& index) const;
 
+    void saveToFile(const QString& fileName) const;
+    bool loadFromFile(const QString& fileName);
+
 signals:
     void consoleOutputChanged(int row);
 

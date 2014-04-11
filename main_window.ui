@@ -70,6 +70,9 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="actionOpenCluster"/>
+    <addaction name="actionSaveClusterAs"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
@@ -78,6 +81,16 @@
   <action name="actionExit">
    <property name="text">
     <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="actionSaveClusterAs">
+   <property name="text">
+    <string>Save Cluster &amp;As...</string>
+   </property>
+  </action>
+  <action name="actionOpenCluster">
+   <property name="text">
+    <string>&amp;Open Cluster...</string>
    </property>
   </action>
  </widget>

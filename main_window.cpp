@@ -5,6 +5,7 @@
 #include "console_output_dialog.h"
 #include "test_cluster_model.h"
 
+#include <QFileDialog>
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget* parent)
@@ -23,6 +24,8 @@ MainWindow::MainWindow(QWidget* parent)
     _updateTimer = new QTimer(this);
     _updateTimer->start(100);
 
+    connect(_ui.actionOpenCluster, SIGNAL(triggered()), this, SLOT(openCluster()));
+    connect(_ui.actionSaveClusterAs, SIGNAL(triggered()), this, SLOT(saveClusterAs()));
     connect(_ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(_ui.pushButtonAddHost, SIGNAL(clicked()), this, SLOT(addHost()));
     connect(
@@ -36,6 +39,32 @@ MainWindow::MainWindow(QWidget* parent)
         this,
         SLOT(hostDoubleClicked(const QModelIndex&)));
     connect(_updateTimer, SIGNAL(timeout()), this, SLOT(updateHosts()));
+}
+
+void MainWindow::openCluster() {
+    QString fileName = QFileDialog::getOpenFileName(
+        this,
+        QString(),
+        QString(),
+        "JSON Files (*.json)");
+    if (fileName.isEmpty()) {
+        return;
+    }
+    if (!_model->loadFromFile(fileName)) {
+        QMessageBox::critical(this, QString(), "Failed to load cluster from file!");
+    }
+}
+
+void MainWindow::saveClusterAs() {
+    QString fileName = QFileDialog::getSaveFileName(
+        this,
+        QString(),
+        QString(),
+        "JSON Files (*.json)");
+    if (fileName.isEmpty()) {
+        return;
+    }
+    _model->saveToFile(fileName);
 }
 
 void MainWindow::addHost() {

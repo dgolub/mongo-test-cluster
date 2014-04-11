@@ -11,3 +11,5 @@ enum HostType {
 };
 
 const char* getHostTypeName(int hostType);
+const char* getHostTypeInternalName(int hostType);
+int findHostTypeByInternalName(const char* internalName);

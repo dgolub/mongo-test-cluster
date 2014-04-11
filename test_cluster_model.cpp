@@ -8,6 +8,11 @@
 #endif
 
 #include <QBrush>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 
 const QString TestClusterModel::_columnHeaders[TestClusterModel::COLUMN_MAX] = {
     "Type",
@@ -189,4 +194,79 @@ QString TestClusterModel::hostConsoleOutput(const QModelIndex& index) const {
         return QString();
     }
     return _hosts[index.row()].consoleOutput;
+}
+
+void TestClusterModel::saveToFile(const QString& fileName) const {
+    QJsonArray array;
+    for (const HostInfo& info : _hosts) {
+        QJsonObject jsonInfo;
+        jsonInfo.insert("type", QString(getHostTypeInternalName(info.type)));
+        jsonInfo.insert("port", info.port);
+        if (!info.dbPath.isEmpty()) {
+            jsonInfo.insert("dbPath", info.dbPath);
+        }
+        if (!info.replicaSet.isEmpty()) {
+            jsonInfo.insert("replicaSet", info.replicaSet);
+        }
+        array.append(jsonInfo);
+    }
+    QJsonDocument doc(array);
+    QFile file(fileName);
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    file.write(doc.toJson());
+    file.close();
+}
+
+bool TestClusterModel::loadFromFile(const QString& fileName) {
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return false;
+    }
+    QByteArray bytes = file.readAll();
+    file.close();
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(bytes, &parseError);
+    if (parseError.error != QJsonParseError::NoError) {
+        return false;
+    }
+    if (!doc.isArray()) {
+        return false;
+    }
+    QList<HostInfo> newHosts;
+    QJsonArray array = doc.array();
+    for (const QJsonValue& value : array) {
+        HostInfo info;
+        QJsonObject object = value.toObject();
+        QJsonValue typeVal = object["type"];
+        if (!typeVal.isString()) {
+            return false;
+        }
+        int type = findHostTypeByInternalName(typeVal.toString().toUtf8().data());
+        if (type < 0) {
+            return false;
+        }
+        info.type = (HostType)type;
+        QJsonValue portVal = object["port"];
+        if (!portVal.isDouble()) {
+            return false;
+        }
+        info.port = static_cast<int>(portVal.toDouble());
+        QJsonValue dbPathVal = object["dbPath"];
+        if (dbPathVal.isString()) {
+            info.dbPath = dbPathVal.toString();
+        }
+        QJsonValue replicaSetVal = object["replicaSet"];
+        if (replicaSetVal.isString()) {
+            info.replicaSet = replicaSetVal.toString();
+        }
+        newHosts.append(info);
+    }
+    for (HostInfo& info : newHosts) {
+        info.process = new QProcess(this);
+        info.state = QProcess::NotRunning;
+    }
+    beginInsertRows(QModelIndex(), 0, newHosts.size() - 1);
+    _hosts = newHosts;
+    endInsertRows();
+    return true;
 }
