@@ -216,6 +216,10 @@ bool TestClusterModel::isDirty() const {
     return _dirty;
 }
 
+bool TestClusterModel::hasFileName() const {
+    return !_fileName.isEmpty();
+}
+
 void TestClusterModel::startAllHosts() {
     for (int i = 0; i < _hosts.size(); i++) {
         startHost(createIndex(i, 0));
@@ -239,7 +243,12 @@ void TestClusterModel::clearCluster() {
         _hosts.clear();
         endRemoveRows();
     }
+    _fileName.clear();
     _dirty = false;
+}
+
+void TestClusterModel::saveToFile() {
+    saveToFile(_fileName);
 }
 
 void TestClusterModel::saveToFile(const QString& fileName) {
@@ -261,6 +270,7 @@ void TestClusterModel::saveToFile(const QString& fileName) {
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     file.write(doc.toJson());
     file.close();
+    _fileName = fileName;
     _dirty = false;
 }
 
@@ -315,6 +325,7 @@ bool TestClusterModel::loadFromFile(const QString& fileName) {
     beginInsertRows(QModelIndex(), 0, newHosts.size() - 1);
     _hosts = newHosts;
     endInsertRows();
+    _fileName = fileName;
     _dirty = false;
     return true;
 }

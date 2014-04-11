@@ -28,11 +28,13 @@ public:
     bool anyStarted() const;
     bool anyStopped() const;
     bool isDirty() const;
+    bool hasFileName() const;
 
     void startAllHosts();
     void stopAllHosts();
 
     void clearCluster();
+    void saveToFile();
     void saveToFile(const QString& fileName);
     bool loadFromFile(const QString& fileName);
 
@@ -65,4 +67,5 @@ private:
     bool _anyStarted;
     bool _anyStopped;
     bool _dirty;
+    QString _fileName;
 };

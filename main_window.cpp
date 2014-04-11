@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(_ui.actionNewCluster, SIGNAL(triggered()), this, SLOT(newCluster()));
     connect(_ui.actionOpenCluster, SIGNAL(triggered()), this, SLOT(openCluster()));
+    connect(_ui.actionSaveCluster, SIGNAL(triggered()), this, SLOT(saveCluster()));
     connect(_ui.actionSaveClusterAs, SIGNAL(triggered()), this, SLOT(saveClusterAs()));
     connect(_ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
     connect(_ui.pushButtonStartAll, SIGNAL(clicked()), this, SLOT(startAllHosts()));
@@ -95,7 +96,7 @@ bool MainWindow::promptToSave() {
     } else if (result == QMessageBox::No) {
         return true;
     }
-    saveClusterAs();
+    saveCluster();
     return !_model->isDirty();
 }
 
@@ -120,6 +121,14 @@ void MainWindow::openCluster() {
     }
     if (!_model->loadFromFile(fileName)) {
         QMessageBox::critical(this, QString(), "Failed to load cluster from file!");
+    }
+}
+
+void MainWindow::saveCluster() {
+    if (_model->hasFileName()) {
+        _model->saveToFile();
+    } else {
+        saveClusterAs();
     }
 }
 

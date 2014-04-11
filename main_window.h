@@ -26,6 +26,7 @@ private:
 private slots:
     void newCluster();
     void openCluster();
+    void saveCluster();
     void saveClusterAs();
     void startAllHosts();
     void stopAllHosts();

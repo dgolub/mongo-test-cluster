@@ -90,6 +90,7 @@
     </property>
     <addaction name="actionNewCluster"/>
     <addaction name="actionOpenCluster"/>
+    <addaction name="actionSaveCluster"/>
     <addaction name="actionSaveClusterAs"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -115,6 +116,11 @@
   <action name="actionNewCluster">
    <property name="text">
     <string>&amp;New Cluster</string>
+   </property>
+  </action>
+  <action name="actionSaveCluster">
+   <property name="text">
+    <string>&amp;Save Cluster</string>
    </property>
   </action>
  </widget>
