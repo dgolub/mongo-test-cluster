@@ -108,13 +108,20 @@ int TestClusterModel::rowCount(const QModelIndex& parent) const {
     return _hosts.size();
 }
 
-void TestClusterModel::addHost(HostType type, int port, const QString& dbPath, const QString& replicaSet) {
+void TestClusterModel::addHost(
+    HostType type,
+    int port,
+    const QString& dbPath,
+    const QString& replicaSet,
+    const QString& configDB)
+{
     beginInsertRows(QModelIndex(), _hosts.size(), _hosts.size());
     HostInfo info;
     info.type = type;
     info.port = port;
     info.dbPath = dbPath;
     info.replicaSet = replicaSet;
+    info.configDB = configDB;
     info.process = new QProcess(this);
     info.state = QProcess::Starting;
     _hosts.append(info);
@@ -146,6 +153,10 @@ void TestClusterModel::startHost(const QModelIndex& index) {
         arguments.append("--shardsvr");
     } else if (info.type == HOST_TYPE_CONFIG) {
         arguments.append("--configsvr");
+    }
+    if (info.type == HOST_TYPE_MONGOS && !info.configDB.isEmpty()) {
+        arguments.append("--configdb");
+        arguments.append(info.configDB);
     }
     info.consoleOutput.clear();
 #ifdef _WIN32

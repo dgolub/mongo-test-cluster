@@ -189,7 +189,7 @@ void MainWindow::addHost() {
     if (dlg.exec() != QDialog::Accepted) {
         return;
     }
-    _model->addHost(dlg.type(), dlg.port(), dlg.dbPath(), dlg.replicaSet());
+    _model->addHost(dlg.type(), dlg.port(), dlg.dbPath(), dlg.replicaSet(), dlg.configDB());
 }
 
 void MainWindow::doHostContextMenu(const QPoint& pos) {

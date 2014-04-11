@@ -43,6 +43,9 @@ AddHostDialog::AddHostDialog(const QStringList& replicaSets, QWidget* parent)
     for (int i = 0; i < HOST_TYPE_MAX; i++) {
         _ui.comboBoxType->addItem(getHostTypeName(i));
     }
+
+    // Default to a standard host.
+    _ui.comboBoxType->setCurrentIndex(HOST_TYPE_STANDARD);
 }
 
 HostType AddHostDialog::type() const {
@@ -61,30 +64,41 @@ QString AddHostDialog::replicaSet() const {
     return _ui.lineEditReplicaSet->text();
 }
 
+QString AddHostDialog::configDB() const {
+    return _ui.lineEditConfigDB->text();
+}
+
 void AddHostDialog::accept() {
     // Verify that the required fields are specified.
+    int type = _ui.comboBoxType->currentIndex();
     if (_ui.lineEditPort->text().isEmpty()) {
         QMessageBox::critical(this, QString(), "Please enter a port number.");
         return;
     }
-    if (_ui.lineEditDBPath->text().isEmpty()) {
+    if (_ui.lineEditDBPath->text().isEmpty() && type != HOST_TYPE_MONGOS) {
         QMessageBox::critical(this, QString(), "Please enter a database path.");
+        return;
+    }
+    if (_ui.lineEditConfigDB->text().isEmpty() && type == HOST_TYPE_MONGOS) {
+        QMessageBox::critical(this, QString(), "Please enter a configuration database.");
         return;
     }
     
     // Prompt to create the DB path if it doesn't exist.
-    QDir dbPath(_ui.lineEditDBPath->text());
-    if (!dbPath.exists()) {
-        int result = QMessageBox::question(
-            this,
-            QString(),
-            "The specified database path does not exist.  Do you want to create it?");
-        if (result != QMessageBox::Yes) {
-            return;
-        }
-        if (!dbPath.mkpath(".")) {
-            QMessageBox::critical(this, QString(), "Failed to create the database path!");
-            return;
+    if (!_ui.labelDBPath->text().isEmpty()) {
+        QDir dbPath(_ui.lineEditDBPath->text());
+        if (!dbPath.exists()) {
+            int result = QMessageBox::question(
+                this,
+                QString(),
+                "The specified database path does not exist.  Do you want to create it?");
+            if (result != QMessageBox::Yes) {
+                return;
+            }
+            if (!dbPath.mkpath(".")) {
+                QMessageBox::critical(this, QString(), "Failed to create the database path!");
+                return;
+            }
         }
     }
 
@@ -112,4 +126,5 @@ void AddHostDialog::typeChanged(int index) {
         _ui.lineEditReplicaSet->clear();
     }
     _ui.lineEditReplicaSet->setEnabled(index != HOST_TYPE_MONGOS && index != HOST_TYPE_CONFIG);
+    _ui.lineEditConfigDB->setEnabled(index == HOST_TYPE_MONGOS);
 }

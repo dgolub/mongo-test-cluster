@@ -19,7 +19,7 @@ public:
     virtual QModelIndex parent(const QModelIndex& index) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
-    void addHost(HostType type, int port, const QString& dbPath, const QString& replicaSet);
+    void addHost(HostType type, int port, const QString& dbPath, const QString& replicaSet, const QString& configDB);
     void startHost(const QModelIndex& index);
     void stopHost(const QModelIndex& index);
     void updateHosts();
@@ -59,6 +59,7 @@ private:
         int port;
         QString dbPath;
         QString replicaSet;
+        QString configDB;
         QProcess* process;
         QProcess::ProcessState state;
         QString consoleOutput;

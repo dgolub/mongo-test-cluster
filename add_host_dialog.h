@@ -16,6 +16,7 @@ public:
     int port() const;
     QString dbPath() const;
     QString replicaSet() const;
+    QString configDB() const;
 
     virtual void accept();
 
