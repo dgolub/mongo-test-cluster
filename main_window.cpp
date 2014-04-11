@@ -104,15 +104,32 @@ bool MainWindow::promptToSave() {
     return !_model->isDirty();
 }
 
+bool MainWindow::promptToStopAll() {
+    if (!_model->anyStarted()) {
+        return true;
+    }
+    int result = QMessageBox::question(
+        this,
+        QString(),
+        "One or more hosts are still running.  If you continue, they will be stopped.  "
+        "Do you wish to proceed?");
+    if (result == QMessageBox::No) {
+        return false;
+    }
+    stopAllHosts();
+    waitForAllStopped();
+    return true;
+}
+
 void MainWindow::newCluster() {
-    if (!promptToSave()) {
+    if (!promptToSave() || !promptToStopAll()) {
         return;
     }
     _model->clearCluster();
 }
 
 void MainWindow::openCluster() {
-    if (!promptToSave()) {
+    if (!promptToSave() || !promptToStopAll()) {
         return;
     }
     QString fileName = QFileDialog::getOpenFileName(

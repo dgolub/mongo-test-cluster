@@ -22,6 +22,7 @@ protected:
 private:
     void waitForAllStopped();
     bool promptToSave();
+    bool promptToStopAll();
 
 private slots:
     void newCluster();
