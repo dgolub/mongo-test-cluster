@@ -7,6 +7,8 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QProgressDialog>
+#include <QTime>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -41,6 +43,35 @@ MainWindow::MainWindow(QWidget* parent)
         this,
         SLOT(hostDoubleClicked(const QModelIndex&)));
     connect(_updateTimer, SIGNAL(timeout()), this, SLOT(updateHosts()));
+}
+
+void MainWindow::closeEvent(QCloseEvent* event) {
+    if (_model->anyStarted()) {
+        int result = QMessageBox::question(
+            this,
+            QString(),
+            "One or more hosts are still running.  If you exit, they will be stopped.  "
+            "Are you sure you want to exit?");
+        if (result == QMessageBox::No) {
+            event->ignore();
+            return;
+        }
+        stopAllHosts();
+        waitForAllStopped();
+    }
+    event->accept();
+}
+
+void MainWindow::waitForAllStopped() {
+    QProgressDialog dlg(this);
+    dlg.setRange(0, 0);
+    dlg.setLabelText("Waiting for all hosts to stop...");
+    dlg.setCancelButton(nullptr);
+    dlg.show();
+    QTime startTime = QTime::currentTime();
+    while (_model->anyStarted() && startTime.secsTo(QTime::currentTime()) < 10) {
+        QApplication::processEvents();
+    }
 }
 
 void MainWindow::openCluster() {

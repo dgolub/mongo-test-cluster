@@ -16,6 +16,12 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget* parent = nullptr);
 
+protected:
+    virtual void closeEvent(QCloseEvent* event);
+
+private:
+    void waitForAllStopped();
+
 private slots:
     void openCluster();
     void saveClusterAs();
