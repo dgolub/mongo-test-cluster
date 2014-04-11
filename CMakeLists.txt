@@ -11,6 +11,11 @@ qt5_wrap_ui(UI_HEADERS
     console_output_dialog.ui
     main_window.ui)
 
+qt5_add_resources(RESOURCES mongotestcluster.qrc)
+if(WIN32)
+set(RESOURCES ${RESOURCES} mongotestcluster.rc)
+endif(WIN32)
+
 add_executable(mongotestcluster WIN32
     mongotestcluster.cpp
     add_host_dialog.cpp
@@ -23,7 +28,8 @@ add_executable(mongotestcluster WIN32
     main_window.h
     test_cluster_model.cpp
     test_cluster_model.h
-    ${UI_HEADERS})
+    ${UI_HEADERS}
+    ${RESOURCES})
 
 target_link_libraries(mongotestcluster Qt5::Widgets)
 

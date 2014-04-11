@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MongoDB Test Cluster Tool</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="mongotestcluster.qrc">
+    <normaloff>:/icons/mongodb_big.ico</normaloff>:/icons/mongodb_big.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -108,6 +112,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="mongotestcluster.qrc"/>
+ </resources>
  <connections/>
 </ui>

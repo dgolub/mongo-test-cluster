@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>mongodb_big.ico</file>
+    </qresource>
+</RCC>
