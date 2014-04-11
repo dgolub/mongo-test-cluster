@@ -26,6 +26,10 @@ MainWindow::MainWindow(QWidget* parent)
     _updateTimer = new QTimer(this);
     _updateTimer->start(100);
 
+    _ui.actionNewCluster->setShortcut(Qt::CTRL + Qt::Key_N);
+    _ui.actionOpenCluster->setShortcut(Qt::CTRL + Qt::Key_O);
+    _ui.actionSaveCluster->setShortcut(Qt::CTRL + Qt::Key_S);
+
     connect(_ui.actionNewCluster, SIGNAL(triggered()), this, SLOT(newCluster()));
     connect(_ui.actionOpenCluster, SIGNAL(triggered()), this, SLOT(openCluster()));
     connect(_ui.actionSaveCluster, SIGNAL(triggered()), this, SLOT(saveCluster()));
