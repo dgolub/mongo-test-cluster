@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QProcess>
 #include <QProgressDialog>
+#include <QSet>
 #include <QTime>
 
 MainWindow::MainWindow(QWidget* parent)
@@ -177,7 +178,14 @@ void MainWindow::stopAllHosts() {
 }
 
 void MainWindow::addHost() {
-    AddHostDialog dlg(this);
+    QSet<QString> replicaSets;
+    for (int i = 0; i < _model->rowCount(); i++) {
+        QString rs = _model->hostReplicaSet(_model->index(i, 0));
+        if (!rs.isEmpty()) {
+            replicaSets.insert(rs);
+        }
+    }
+    AddHostDialog dlg(replicaSets.toList(), this);
     if (dlg.exec() != QDialog::Accepted) {
         return;
     }

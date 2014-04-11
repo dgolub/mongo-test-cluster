@@ -204,6 +204,13 @@ int TestClusterModel::hostPort(const QModelIndex& index) const {
     return _hosts[index.row()].port;
 }
 
+QString TestClusterModel::hostReplicaSet(const QModelIndex& index) const {
+    if (index.row() < 0 || index.row() >= _hosts.size()) {
+        return QString();
+    }
+    return _hosts[index.row()].replicaSet;
+}
+
 QString TestClusterModel::hostConsoleOutput(const QModelIndex& index) const {
     if (index.row() < 0 || index.row() >= _hosts.size()) {
         return QString();

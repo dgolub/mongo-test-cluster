@@ -9,8 +9,9 @@
 #include <QFileSystemModel>
 #include <QIntValidator>
 #include <QMessageBox>
+#include <QStringListModel>
 
-AddHostDialog::AddHostDialog(QWidget* parent)
+AddHostDialog::AddHostDialog(const QStringList& replicaSets, QWidget* parent)
     : QDialog(parent)
 {
     _ui.setupUi(this);
@@ -30,6 +31,13 @@ AddHostDialog::AddHostDialog(QWidget* parent)
     model->setRootPath(QDir::currentPath());
     completer->setModel(model);
     _ui.lineEditDBPath->setCompleter(completer);
+
+    // Enable replica set auto-completion.
+    if (!replicaSets.isEmpty()) {
+        QCompleter* rsCompleter = new QCompleter(this);
+        rsCompleter->setModel(new QStringListModel(replicaSets, rsCompleter));
+        _ui.lineEditReplicaSet->setCompleter(rsCompleter);
+    }
 
     // Add all host types to the combo box.
     for (int i = 0; i < HOST_TYPE_MAX; i++) {

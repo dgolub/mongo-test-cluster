@@ -10,7 +10,7 @@
 class AddHostDialog : public QDialog {
     Q_OBJECT
 public:
-    AddHostDialog(QWidget* parent = nullptr);
+    AddHostDialog(const QStringList& replicaSets, QWidget* parent = nullptr);
 
     HostType type() const;
     int port() const;
