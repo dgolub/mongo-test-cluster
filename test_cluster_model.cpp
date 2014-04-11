@@ -175,6 +175,8 @@ void TestClusterModel::stopHost(const QModelIndex& index) {
 }
 
 void TestClusterModel::updateHosts() {
+    _anyStarted = false;
+    _anyStopped = false;
     for (int i = 0; i < _hosts.size(); i++) {
         HostInfo& info = _hosts[i];
         if (info.state != info.process->state()) {
@@ -182,6 +184,8 @@ void TestClusterModel::updateHosts() {
             QModelIndex index = createIndex(i, COLUMN_STATE);
             emit dataChanged(index, index);
         }
+        _anyStarted = _anyStarted || info.state != QProcess::NotRunning;
+        _anyStopped = _anyStopped || info.state == QProcess::NotRunning;
         if (info.state != QProcess::NotRunning) {
             QByteArray newConsoleOutput = info.process->readAll();
             if (!newConsoleOutput.isEmpty()) {
@@ -197,6 +201,14 @@ QString TestClusterModel::hostConsoleOutput(const QModelIndex& index) const {
         return QString();
     }
     return _hosts[index.row()].consoleOutput;
+}
+
+bool TestClusterModel::anyStarted() const {
+    return _anyStarted;
+}
+
+bool TestClusterModel::anyStopped() const {
+    return _anyStopped;
 }
 
 void TestClusterModel::startAllHosts() {

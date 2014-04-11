@@ -107,4 +107,6 @@ void MainWindow::hostDoubleClicked(const QModelIndex& index) {
 
 void MainWindow::updateHosts() {
     _model->updateHosts();
+    _ui.pushButtonStartAll->setEnabled(_model->anyStopped());
+    _ui.pushButtonStopAll->setEnabled(_model->anyStarted());
 }

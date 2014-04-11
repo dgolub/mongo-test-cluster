@@ -23,7 +23,10 @@ public:
     void startHost(const QModelIndex& index);
     void stopHost(const QModelIndex& index);
     void updateHosts();
+
     QString hostConsoleOutput(const QModelIndex& index) const;
+    bool anyStarted() const;
+    bool anyStopped() const;
 
     void startAllHosts();
     void stopAllHosts();
@@ -57,4 +60,6 @@ private:
     static const QString _columnHeaders[COLUMN_MAX];
 
     QList<HostInfo> _hosts;
+    bool _anyStarted;
+    bool _anyStopped;
 };
