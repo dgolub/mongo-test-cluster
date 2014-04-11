@@ -211,6 +211,13 @@ QString TestClusterModel::hostConsoleOutput(const QModelIndex& index) const {
     return _hosts[index.row()].consoleOutput;
 }
 
+bool TestClusterModel::hostRunning(const QModelIndex& index) const {
+    if (index.row() < 0 || index.row() >= _hosts.size()) {
+        return false;
+    }
+    return _hosts[index.row()].state != QProcess::NotRunning;
+}
+
 bool TestClusterModel::anyStarted() const {
     return _anyStarted;
 }

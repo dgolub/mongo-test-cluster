@@ -189,6 +189,16 @@ void MainWindow::doHostContextMenu(const QPoint& pos) {
     if (indexes.isEmpty()) {
         return;
     }
+    bool anyStarted = false;
+    bool anyStopped = false;
+    for (QModelIndex index : indexes) {
+        bool running = _model->hostRunning(index);
+        anyStarted = anyStarted || running;
+        anyStopped = anyStopped || !running;
+    }
+    _startHostAction->setEnabled(anyStopped);
+    _stopHostAction->setEnabled(anyStarted);
+    _openMongoShellAction->setEnabled(anyStarted && indexes.size() == 1);
     QAction* action = _hostContextMenu->exec(_ui.treeView->mapToGlobal(pos));
     for (QModelIndex index : indexes) {
         if (action == _startHostAction) {

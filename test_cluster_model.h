@@ -26,6 +26,7 @@ public:
 
     int hostPort(const QModelIndex& index) const;
     QString hostConsoleOutput(const QModelIndex& index) const;
+    bool hostRunning(const QModelIndex& index) const;
     bool anyStarted() const;
     bool anyStopped() const;
     bool isDirty() const;
