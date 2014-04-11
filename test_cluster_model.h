@@ -24,6 +24,7 @@ public:
     void stopHost(const QModelIndex& index);
     void updateHosts();
 
+    int hostPort(const QModelIndex& index) const;
     QString hostConsoleOutput(const QModelIndex& index) const;
     bool anyStarted() const;
     bool anyStopped() const;

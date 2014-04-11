@@ -42,5 +42,6 @@ private:
     QMenu* _hostContextMenu;
     QAction* _startHostAction;
     QAction* _stopHostAction;
+    QAction* _openMongoShellAction;
     QTimer* _updateTimer;
 };

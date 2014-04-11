@@ -7,6 +7,7 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QProcess>
 #include <QProgressDialog>
 #include <QTime>
 
@@ -22,6 +23,8 @@ MainWindow::MainWindow(QWidget* parent)
     _hostContextMenu = new QMenu(this);
     _startHostAction = _hostContextMenu->addAction("Start");
     _stopHostAction = _hostContextMenu->addAction("Stop");
+    _hostContextMenu->addSeparator();
+    _openMongoShellAction = _hostContextMenu->addAction("Open Mongo Shell");
 
     _updateTimer = new QTimer(this);
     _updateTimer->start(100);
@@ -192,6 +195,11 @@ void MainWindow::doHostContextMenu(const QPoint& pos) {
             _model->startHost(index);
         } else if (action == _stopHostAction) {
             _model->stopHost(index);
+        } else if (action == _openMongoShellAction) {
+            QStringList arguments;
+            arguments.append("--port");
+            arguments.append(QString::number(_model->hostPort(index)));
+            QProcess().startDetached("mongo", arguments);
         }
     }
 }

@@ -197,6 +197,13 @@ void TestClusterModel::updateHosts() {
     }
 }
 
+int TestClusterModel::hostPort(const QModelIndex& index) const {
+    if (index.row() < 0 || index.row() >= _hosts.size()) {
+        return 0;
+    }
+    return _hosts[index.row()].port;
+}
+
 QString TestClusterModel::hostConsoleOutput(const QModelIndex& index) const {
     if (index.row() < 0 || index.row() >= _hosts.size()) {
         return QString();
