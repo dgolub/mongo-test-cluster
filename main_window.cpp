@@ -217,10 +217,19 @@ void MainWindow::doHostContextMenu(const QPoint& pos) {
         } else if (action == _stopHostAction) {
             _model->stopHost(index);
         } else if (action == _openMongoShellAction) {
+#ifdef _WIN32
+            QString program = "cmd";
+#else
+            QString program = "mongo";
+#endif
             QStringList arguments;
+#ifdef _WIN32
+            arguments.append("/c");
+            arguments.append("mongo");
+#endif
             arguments.append("--port");
             arguments.append(QString::number(_model->hostPort(index)));
-            QProcess().startDetached("mongo", arguments);
+            QProcess().startDetached(program, arguments);
         } else if (action == _removeAction) {
             _model->removeHost(index);
         }
