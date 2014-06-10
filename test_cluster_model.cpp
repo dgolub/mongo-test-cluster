@@ -305,6 +305,9 @@ void TestClusterModel::saveToFile(const QString& fileName) {
         if (!info.replicaSet.isEmpty()) {
             jsonInfo.insert("replicaSet", info.replicaSet);
         }
+        if (!info.configDB.isEmpty()) {
+            jsonInfo.insert("configDB", info.configDB);
+        }
         array.append(jsonInfo);
     }
     QJsonDocument doc(array);
@@ -357,6 +360,10 @@ bool TestClusterModel::loadFromFile(const QString& fileName) {
         QJsonValue replicaSetVal = object["replicaSet"];
         if (replicaSetVal.isString()) {
             info.replicaSet = replicaSetVal.toString();
+        }
+        QJsonValue configDBVal = object["configDB"];
+        if (configDBVal.isString()) {
+            info.configDB = configDBVal.toString();
         }
         newHosts.append(info);
     }
