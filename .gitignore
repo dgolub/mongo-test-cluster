@@ -6,6 +6,7 @@
 *.suo
 *.vcxproj
 *_automoc.cpp
+_CPack_Packages
 CMakeFiles
 CMakeCache.txt
 Debug
@@ -15,3 +16,8 @@ cmake_install.cmake
 moc_*.cpp
 qrc_*.cpp
 ui_*.h
+CPackConfig.cmake
+CPackSourceConfig.cmake
+*.wixobj
+install_manifest.txt
+*.msi
